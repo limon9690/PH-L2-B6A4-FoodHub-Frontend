@@ -15,6 +15,8 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/co
 import Link from "next/link";
 import { ModeToggle } from "./ui/mode-toggler";
 import { authClient } from "@/lib/auth-client";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 interface MenuItem {
   title: string;
@@ -24,9 +26,13 @@ interface MenuItem {
 interface Navbar1Props {
   className?: string;
   publicMenu?: MenuItem[];
-  auth?: {
+  authNotLoggedIn?: {
     login: { title: string; url: string };
     signup: { title: string; url: string };
+  };
+  authLoggedIn?: {
+    dashboard: { title: string; url: string };
+    logout: { title: string; url: string }
   };
 }
 
@@ -36,13 +42,31 @@ const Navbar1 = ({
     { title: "Browse Meals", url: "/meals" },
     { title: "Browse Providers", url: "/providers" },
   ],
-  auth = {
+  authNotLoggedIn = {
     login: { title: "Login", url: "/login" },
     signup: { title: "Register", url: "/register" },
-    //logout: {title : "Logout", url: "/logout"}
+  },
+  authLoggedIn = {
+    dashboard: { title: "Dashboard", url: "/dashboard" },
+    logout: { title: "Logout", url: "/" }
   },
   className,
 }: Navbar1Props) => {
+
+  const router = useRouter();
+
+  const handleLogout = async () => {
+    await authClient.signOut({
+      fetchOptions: {
+        onSuccess: () => {
+          router.push("/");
+          router.refresh();
+        },
+      },
+    });
+
+    toast.success("Logged Out Successfully!");
+  }
 
   const { data: session, isPending, error } = authClient.useSession();
   let isloggedIn = false;
@@ -51,7 +75,6 @@ const Navbar1 = ({
     isloggedIn = true;
     publicMenu.push({ title: "Become A Provider", url: "/providers" })
   }
-  console.log(session);
 
   return (
     <section className={cn("py-4", className)}>
@@ -81,16 +104,33 @@ const Navbar1 = ({
             </NavigationMenuList>
           </NavigationMenu>
 
-          <div className="flex gap-2">
-            <Button asChild variant="outline" size="sm">
-              <Link href={auth.login.url}>{auth.login.title}</Link>
-            </Button>
-            <Button asChild size="sm">
-              <Link href={auth.signup.url}>{auth.signup.title}</Link>
-            </Button>
+          {
+            !isloggedIn ? (
+              <div className="flex gap-2">
+                <Button asChild variant="outline" size="sm">
+                  <Link href={authNotLoggedIn.login.url}>{authNotLoggedIn.login.title}</Link>
+                </Button>
+                <Button asChild size="sm">
+                  <Link href={authNotLoggedIn.signup.url}>{authNotLoggedIn.signup.title}</Link>
+                </Button>
 
-            <ModeToggle />
-          </div>
+                <ModeToggle />
+              </div>
+            ) : (
+              <div className="flex gap-2">
+                <Button asChild variant="outline" size="sm">
+                  <Link href={authLoggedIn.dashboard.url}>{authLoggedIn.dashboard.title}</Link>
+                </Button>
+                <Button asChild size="sm" onClick={handleLogout}>
+                  <Link href={authLoggedIn.logout.url}>{authLoggedIn.logout.title}</Link>
+                </Button>
+
+                <ModeToggle />
+              </div>
+            )
+          }
+
+
         </nav>
 
         {/* Mobile */}
@@ -120,15 +160,32 @@ const Navbar1 = ({
                     ))}
                   </div>
 
-                  <div className="flex flex-col gap-3">
-                    <Button asChild variant="outline">
-                      <Link href={auth.login.url}>{auth.login.title}</Link>
-                    </Button>
-                    <Button asChild>
-                      <Link href={auth.signup.url}>{auth.signup.title}</Link>
-                    </Button>
-                    <ModeToggle />
-                  </div>
+                  {
+                    !isloggedIn ? (
+                      <div className="flex flex-col gap-3">
+                        <ModeToggle />
+                        <Button asChild variant="outline">
+                          <Link href={authNotLoggedIn.login.url}>{authNotLoggedIn.login.title}</Link>
+                        </Button>
+                        <Button asChild>
+                          <Link href={authNotLoggedIn.signup.url}>{authNotLoggedIn.signup.title}</Link>
+                        </Button>
+                        
+                      </div>
+                    ) : (
+                      <div className="flex flex-col gap-3">
+                        <ModeToggle />
+                        <Button asChild variant="outline">
+                          <Link href={authLoggedIn.dashboard.url}>{authLoggedIn.dashboard.title}</Link>
+                        </Button>
+                        <Button asChild onClick={handleLogout}>
+                          <Link href={authLoggedIn.logout.url}>{authLoggedIn.logout.title}</Link>
+                        </Button>
+                        
+                      </div>
+                    )
+                  }
+
                 </div>
               </SheetContent>
             </Sheet>
