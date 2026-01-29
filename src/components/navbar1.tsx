@@ -14,6 +14,7 @@ import {
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import Link from "next/link";
 import { ModeToggle } from "./ui/mode-toggler";
+import { authClient } from "@/lib/auth-client";
 
 interface MenuItem {
   title: string;
@@ -22,7 +23,7 @@ interface MenuItem {
 
 interface Navbar1Props {
   className?: string;
-  menu?: MenuItem[];
+  publicMenu?: MenuItem[];
   auth?: {
     login: { title: string; url: string };
     signup: { title: string; url: string };
@@ -30,17 +31,28 @@ interface Navbar1Props {
 }
 
 const Navbar1 = ({
-  menu = [
+  publicMenu = [
     { title: "FoodHub", url: "/" },
     { title: "Browse Meals", url: "/meals" },
     { title: "Browse Providers", url: "/providers" },
   ],
   auth = {
     login: { title: "Login", url: "/login" },
-    signup: { title: "Sign up", url: "/signup" },
+    signup: { title: "Register", url: "/register" },
+    //logout: {title : "Logout", url: "/logout"}
   },
   className,
 }: Navbar1Props) => {
+
+  const { data: session, isPending, error } = authClient.useSession();
+  let isloggedIn = false;
+
+  if (session?.user) {
+    isloggedIn = true;
+    publicMenu.push({ title: "Become A Provider", url: "/providers" })
+  }
+  console.log(session);
+
   return (
     <section className={cn("py-4", className)}>
       <div className="container px-4 sm:px-6 lg:px-8">
@@ -48,18 +60,24 @@ const Navbar1 = ({
         <nav className="hidden items-center justify-between lg:flex">
           <NavigationMenu>
             <NavigationMenuList>
-              {menu.map((item) => (
-                <NavigationMenuItem key={item.title}>
-                  <NavigationMenuLink asChild>
-                    <Link
-                      href={item.url}
-                      className="group inline-flex h-10 w-max items-center justify-center rounded-md bg-background px-4 py-2 text-sm font-medium transition-colors hover:bg-muted hover:text-accent-foreground"
-                    >
-                      {item.title}
-                    </Link>
-                  </NavigationMenuLink>
-                </NavigationMenuItem>
-              ))}
+
+              {
+                publicMenu.map((item) => (
+                  <NavigationMenuItem key={item.title}>
+                    <NavigationMenuLink asChild>
+
+                      <Link
+                        href={item.url}
+                        className="group inline-flex h-10 w-max items-center justify-center rounded-md bg-background px-4 py-2 text-sm font-medium transition-colors hover:bg-muted hover:text-accent-foreground"
+                      >
+                        {item.title}
+                      </Link>
+
+                    </NavigationMenuLink>
+                  </NavigationMenuItem>
+                ))
+              }
+
             </NavigationMenuList>
           </NavigationMenu>
 
@@ -91,7 +109,7 @@ const Navbar1 = ({
                     <SheetTitle className="sr-only">Navigation menu</SheetTitle>
 
 
-                    {menu.map((item) => (
+                    {publicMenu.map((item) => (
                       <Link
                         key={item.title}
                         href={item.url}
