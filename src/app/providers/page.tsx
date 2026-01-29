@@ -1,3 +1,4 @@
+import ProviderCard from '@/components/provider-card';
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { providerService } from '@/service/providers.service'
@@ -19,35 +20,7 @@ export default async function ProvidersPage() {
             {/* Grid */}
             <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
                 {providers.map((p) => (
-                    <Card key={p.id} className="transition hover:shadow-md">
-                        <CardContent className="p-5">
-                            <div className="flex items-start justify-between gap-3">
-                                <div>
-                                    <h3 className="text-lg font-semibold">{p.shopName}</h3>
-
-                                    {p.user?.address?.address && (
-                                        <p className="mt-1 text-sm text-muted-foreground">
-                                           Address: {p.user.address.address}
-                                        </p>
-                                    )}
-
-                                    {p.user?.address?.phone && (
-                                        <p
-                                            className="mt-3 inline-block text-sm font-medium text-muted-foreground"
-                                        >
-                                            Phone: {p.user?.address?.phone}
-                                        </p>
-                                    )}
-                                </div>
-                            </div>
-
-                            <div className="mt-5">
-                                <Button asChild variant="outline" className="w-full">
-                                    <Link href={`/providers/${p.id}`}>View shop</Link>
-                                </Button>
-                            </div>
-                        </CardContent>
-                    </Card>
+                    <ProviderCard key = {p.id} providerDetails = {p}/>
                 ))}
             </div>
         </section>

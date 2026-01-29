@@ -60,7 +60,7 @@ const Navbar1 = ({
       fetchOptions: {
         onSuccess: () => {
           router.push("/");
-          router.refresh();
+          //router.refresh();
         },
       },
     });
@@ -73,7 +73,10 @@ const Navbar1 = ({
 
   if (session?.user) {
     isloggedIn = true;
-    publicMenu.push({ title: "Become A Provider", url: "/providers" })
+  }
+
+  if (isloggedIn && session?.user?.role === "USER") {
+    publicMenu.push({ title: "Become A Provider", url: "/providers" });
   }
 
   return (
