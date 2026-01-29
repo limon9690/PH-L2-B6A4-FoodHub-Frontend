@@ -11,7 +11,6 @@ export default async function MealDetailPage({
 }) {
     const {id} = await params;
     const meal = await mealService.getSingleMeal(id);
-
     console.log(meal);
 
   return (
@@ -35,10 +34,10 @@ export default async function MealDetailPage({
 
           {/* Buttons */}
           <div className="mt-2 flex flex-col gap-3 sm:flex-row">
-            <Button variant="link" className="w-full sm:w-auto">
+            <Button variant="link" className="w-full sm:w-auto cursor-pointer">
               Add to cart
             </Button>
-            <Button variant="link" className="w-full sm:w-auto">Order now</Button>
+            <Button variant="link" className="w-full sm:w-auto cursor-pointer">Order now</Button>
           </div>
 
           <Separator className="my-4" />

@@ -2,7 +2,7 @@ import { MealCard } from "@/components/meal-card";
 import { mealService } from "@/service/meal.service"
 
 export default async function MealsPage() {
-  const meal = await mealService.getAllMeals();
+  const meals = await mealService.getAllMeals();
   
   return (
         <section className="container py-10 px-4 sm:px-6 lg:px-12">
@@ -14,7 +14,7 @@ export default async function MealsPage() {
       </div>
 
       <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-        {meal.data.map((meal) => (
+        {meals.data.map((meal) => (
           <MealCard key={meal.id} mealDetails={meal} />
         ))}
       </div>
