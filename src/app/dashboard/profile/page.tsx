@@ -13,11 +13,11 @@ import {
 } from "@/components/ui/field";
 import z from "zod";
 import { useForm } from "@tanstack/react-form";
-import { addressService } from "@/service/address.service";
+import { addressService } from "@/client-service/address.service";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { authClient } from "@/lib/auth-client";
-import { providerService } from "@/service/providers.service";
+import { providerService } from "@/client-service/providers.service";
 
 const addressSchema = z.object({
     address: z.string().min(1, "Address is required."),

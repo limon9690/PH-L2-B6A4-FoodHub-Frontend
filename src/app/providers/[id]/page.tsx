@@ -1,7 +1,7 @@
 import { MealCard } from '@/components/meal-card';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { providerService } from '@/service/providers.service';
+import { providerService } from '@/client-service/providers.service';
 import Link from 'next/link';
 
 export default async function ProviderDetailsPage({

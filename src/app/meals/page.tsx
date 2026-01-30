@@ -1,5 +1,5 @@
 import { MealCard } from "@/components/meal-card";
-import { mealService } from "@/service/meal.service"
+import { mealService } from "@/client-service/meal.service"
 
 export default async function MealsPage() {
   const meals = await mealService.getAllMeals();

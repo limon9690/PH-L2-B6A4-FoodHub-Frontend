@@ -1,6 +1,6 @@
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
-import { mealService } from '@/service/meal.service';
+import { mealService } from '@/client-service/meal.service';
 import Link from 'next/link';
 import { Separator } from "@/components/ui/separator"
 

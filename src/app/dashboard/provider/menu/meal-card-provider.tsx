@@ -1,4 +1,4 @@
-//import { Badge } from "@/components/ui/badge"
+'use client'
 import { Button } from "@/components/ui/button"
 import {
     Card,
@@ -8,11 +8,31 @@ import {
     CardHeader,
     CardTitle,
 } from "@/components/ui/card"
+
 import Link from "next/link";
+import { toast } from "sonner";
 import { DeleteDialogue } from "./delete-dialogue";
+
+import { startTransition } from "react";
+import { deleteMealAction } from "./action";
+
+
 
 export function ProviderMealCard(props) {
     const meal = props.mealDetails;
+
+
+    const handleDelete = () => {
+        startTransition(async () => {
+            try {
+                await deleteMealAction(meal.id);
+                toast.success("Meal deleted successfully!");
+            } catch (e: any) {
+                toast.error(e?.message ?? "Failed to delete meal");
+            }
+        });
+    };
+
     return (
         <Card className="relative mx-auto w-full max-w-sm pt-0">
             <div className="absolute inset-0 z-30 aspect-video bg-black/35" />
@@ -39,9 +59,18 @@ export function ProviderMealCard(props) {
                     <Link href={`/dashboard/provider/menu/${meal.id}/edit-meal`}>Edit Meal</Link>
                 </Button>
 
-                    <Button variant="destructive" className="w-full cursor-pointer">
-                        Delete Meal
-                    </Button>
+                <DeleteDialogue
+                    trigger={
+                        <Button variant="destructive" className="w-full cursor-pointer">
+                            Delete Meal
+                        </Button>
+                    }
+                    title=""
+                    description=""
+                    onConfirm={handleDelete}
+                />
+
+
 
             </CardFooter>
 

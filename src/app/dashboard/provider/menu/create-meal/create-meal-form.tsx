@@ -26,8 +26,8 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select";
-import { categoryService } from "@/service/category.service";
-import { mealService } from "@/service/meal.service";
+import { categoryService } from "@/client-service/category.service";
+import { mealService } from "@/client-service/meal.service";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 

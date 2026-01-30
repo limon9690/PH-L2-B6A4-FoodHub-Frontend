@@ -1,24 +1,14 @@
-"use client";
-
-import * as React from "react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { providerService } from "@/service/providers.service";
 import { ProviderMealCard } from "./meal-card-provider";
+import {getMealsForCurrentProvider} from "./action"
 
 
-export default function MenuMangementPage() {
-  const [meals, setMeals] = React.useState([]);
 
-  React.useEffect(() => {
-    const load = async () => {
-      const provider = await providerService.getSingleProviderByUserId();
-      const result = await providerService.getSingleProvider(provider.id);
+export default async function MenuMangementPage() {
 
-      setMeals(result.meals);
-    };
-    load();
-  }, []);
+  const meals = await getMealsForCurrentProvider() ?? [];
+
 
   return (
     <div className="space-y-6">

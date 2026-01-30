@@ -12,7 +12,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Field, FieldError, FieldGroup, FieldLabel } from "@/components/ui/field"
 import Link from "next/link"
-import { providerService } from "@/service/providers.service"
+import { providerService } from "@/client-service/providers.service"
 import { authClient } from "@/lib/auth-client"
 
 const schema = z.object({
