@@ -13,6 +13,15 @@ export const providerService = {
         return res.json();
     },
 
+    getSingleProviderByUserId : async () => {
+        const res = await fetch(`${url}/me`, {
+            method: 'GET',
+            credentials: "include"
+        })
+
+        return res.json();
+    },
+
     createProvider : async(data) => {
         let response = await fetch(url, {
             method: 'POST',
