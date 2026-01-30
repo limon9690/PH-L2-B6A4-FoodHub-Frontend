@@ -69,15 +69,21 @@ const Navbar1 = ({
   }
 
   const { data: session, isPending, error } = authClient.useSession();
+
+  if (isPending) return null;
+
   let isloggedIn = false;
 
   if (session?.user) {
     isloggedIn = true;
   }
-
   if (isloggedIn && session?.user?.role === "USER") {
-    publicMenu.push({ title: "Become A Provider", url: "/providers" });
+    publicMenu.push({ title: "Become A Provider", url: "/become-a-provider" });
   }
+
+  // if (isloggedIn && session?.user?.role === "PROVIDER") {
+  //   publicMenu.push({title: "Manage Menu", url: "/provider/menu"})
+  // }
 
   return (
     <section className={cn("py-4", className)}>

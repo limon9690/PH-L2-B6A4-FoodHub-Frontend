@@ -146,7 +146,7 @@ export function LoginForm() {
       </CardContent>
 
       <div className="px-6 pb-6">
-        <Button type="submit" form="login-form" className="w-full">
+        <Button type="submit" form="login-form" className="w-full cursor-pointer">
           Login
         </Button>
         <FieldDescription className="text-center pt-4">

@@ -55,8 +55,15 @@ export function SignupForm() {
       });
 
       if (data.error === null) {
-        toast.success("Registered successfully")
-        router.push('/');
+        toast.success("Registered successfully. Login to continue.")
+        await authClient.signOut({
+              fetchOptions: {
+                onSuccess: () => {
+                  router.push("/login");
+                  //router.refresh();
+                },
+              },
+            });
       } else {
         toast.error(data.error.message);
         form.reset();
@@ -224,7 +231,7 @@ export function SignupForm() {
       </CardContent>
 
       <div className="px-6 pb-6">
-        <Button type="submit" form="register-form" className="w-full">
+        <Button type="submit" form="register-form" className="w-full cursor-pointer">
           Register
         </Button>
         <FieldDescription className="text-center pt-4">

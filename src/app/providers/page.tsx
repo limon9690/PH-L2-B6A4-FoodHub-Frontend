@@ -6,7 +6,6 @@ import Link from 'next/link'
 
 export default async function ProvidersPage() {
     const providers = await providerService.getAllProviders();
-    console.log(providers);
     return (
         <section className="container py-10 px-4 sm:px-6 lg:px-12">
             {/* Header */}

@@ -1,13 +1,29 @@
+const url = "http://localhost:5000/api/providers";
+
 export const providerService = {
     getAllProviders: async () => {
-        const res = await fetch('http://localhost:5000/api/providers');
+        const res = await fetch(url);
 
         return res.json();
     },
 
     getSingleProvider : async(providerId : string) => {
-        const res = await fetch(`http://localhost:5000/api/providers/${providerId}`);
+        const res = await fetch(`${url}/${providerId}`);
 
         return res.json();
+    },
+
+    createProvider : async(data) => {
+        let response = await fetch(url, {
+            method: 'POST',
+            credentials: "include",
+            body: JSON.stringify(data),
+            headers: {
+                'Content-type' : 'application/json'
+            }
+        });
+
+        response = await response.json();
+        return response;
     }
 }
