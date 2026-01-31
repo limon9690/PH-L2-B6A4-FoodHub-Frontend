@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-import { cartService } from "@/client-service/cart.service";
+import { cartService } from "@/service/cart.service";
 import Link from "next/link";
 
 interface CartItem {

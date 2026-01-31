@@ -1,6 +1,6 @@
-import { userService } from "@/client-service/user.service";
+import { userService } from "@/service/user.service";
 import { CheckoutComponent } from "./checkout-component";
-import { addressService } from "@/client-service/address.service";
+import { addressService } from "@/service/address.service";
 
 const CheckoutPage = async () => {
     const userData = await userService.getUserDetails();
@@ -9,7 +9,6 @@ const CheckoutPage = async () => {
     const addressData = await userService.getUserAddress(userData.id);
 
 
-    // mock data for now (replace later)
     const user = {
         name: userData.name,
         email: userData.email,

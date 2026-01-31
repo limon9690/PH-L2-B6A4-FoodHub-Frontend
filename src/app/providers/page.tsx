@@ -1,7 +1,7 @@
 import ProviderCard from '@/components/provider-card';
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
-import { providerService } from '@/client-service/providers.service'
+import { providerService } from '@/service/providers.service'
 import Link from 'next/link'
 
 export default async function ProvidersPage() {

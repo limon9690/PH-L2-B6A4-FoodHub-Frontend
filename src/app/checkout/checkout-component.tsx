@@ -5,18 +5,18 @@ import { Separator } from "@/components/ui/separator";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { cartService } from "@/client-service/cart.service";
-import { orderService } from "@/client-service/order.service";
+import { cartService } from "@/service/cart.service";
+import { orderService } from "@/service/order.service";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 
 type MealItem = {
-    mealId : string;
-    quantity : number;
+    mealId: string;
+    quantity: number;
 }
 
 export type CreateOrderRequest = {
-    meals : MealItem[];
+    meals: MealItem[];
 }
 
 
@@ -35,17 +35,33 @@ export function CheckoutComponent({ user, address }) {
     );
 
     const handleConfirmOrder = async () => {
-        const requestBody : CreateOrderRequest = {
+        const requestBody: CreateOrderRequest = {
             meals: []
         };
 
         items.map(item => {
-            let it : MealItem = {
+            let it: MealItem = {
                 mealId: item.id,
                 quantity: item.quantity
             }
             requestBody.meals.push(it);
         })
+
+        let sameProvider = "";
+
+        items.map(it => {
+            if (sameProvider === "") {
+                sameProvider = it.providerId;
+            }
+
+            if (sameProvider !== it.providerId) {
+                toast.error("Right now you can only order form one provider at a time");
+                return;
+            }
+        }
+        )
+
+        console.log(items);
 
         const result = await orderService.createOrder(requestBody);
 

@@ -7,7 +7,7 @@ import {
     CarouselNext,
     CarouselPrevious,
 } from "@/components/ui/carousel"
-import { providerService } from "@/client-service/providers.service";
+import { providerService } from "@/service/providers.service";
 import ProviderCard from "./provider-card";
 
 export async function FeaturedProviders() {

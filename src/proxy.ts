@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { userService } from "./client-service/user.service";
+import { userService } from "./service/user.service";
 
 export async function proxy(request: NextRequest) {
     let isAuthenticated = false;

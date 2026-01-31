@@ -7,7 +7,7 @@ import {
     CarouselNext,
     CarouselPrevious,
 } from "@/components/ui/carousel"
-import { mealService } from "@/client-service/meal.service"
+import { mealService } from "@/service/meal.service"
 import { MealCard } from "./meal-card";
 
 export async function FeaturedMeals() {

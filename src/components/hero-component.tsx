@@ -32,18 +32,7 @@ export function HeroSection() {
               </Button>
 
               <Button asChild size="lg" variant="outline" className="w-full sm:w-auto">
-                <Link href="/providers">Browse kitchens</Link>
-              </Button>
-            </div>
-
-            {/* Optional: Search (simple, minimal) */}
-            <div className="mt-2 flex flex-col gap-3 sm:flex-row">
-              <Input
-                placeholder="Search meals (e.g., biryani, pasta, korean...)"
-                className="h-11"
-              />
-              <Button variant="secondary" className="h-11">
-                Search
+                <Link href="/providers">Browse Providers</Link>
               </Button>
             </div>
 

@@ -1,7 +1,7 @@
 import { MealCard } from "@/components/meal-card";
-import { mealService } from "@/client-service/meal.service"
+import { mealService } from "@/service/meal.service"
 import MealsControls from "./meal-controls";
-import { categoryService } from "@/client-service/category.service";
+import { categoryService } from "@/service/category.service";
 
 type SearchParams = {
   searchParam? : string;

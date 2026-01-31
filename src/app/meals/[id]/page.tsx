@@ -3,7 +3,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import Link from 'next/link';
 import { Separator } from "@/components/ui/separator"
-import { cartService } from '@/client-service/cart.service';
+import { cartService } from '@/service/cart.service';
 import { useParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 

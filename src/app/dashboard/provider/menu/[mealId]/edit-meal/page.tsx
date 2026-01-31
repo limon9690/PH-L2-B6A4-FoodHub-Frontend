@@ -1,4 +1,4 @@
-import { mealService } from '@/client-service/meal.service';
+import { mealService } from '@/service/meal.service';
 import React from 'react'
 import { UpdateMealForm } from './update-meal-form';
 
