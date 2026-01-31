@@ -1,55 +1,34 @@
 "use client";
 
 import { X } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
+import { cartService } from "@/client-service/cart.service";
+import Link from "next/link";
 
 interface CartItem {
   id: string;
   name: string;
-  image: string;
+  image_url: string;
   price: number;
   quantity: number;
 }
 
-const DEFAULT_ITEMS: CartItem[] = [
-  {
-    id: "1",
-    name: "Minimalist Beige Sneakers",
-    image: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/ecommerce/clothes/Minimalist-Beige-Sneakers-2.png",
-    price: 120.0,
-    quantity: 1,
-  },
-  {
-    id: "2",
-    name: "Embroidered Blue Top",
-    image:
-      "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/ecommerce/clothes/Woman-in-Embroidered-Blue-Top-2.png",
-    price: 140.0,
-    quantity: 1,
-  },
-  {
-    id: "3",
-    name: "Classic Fedora Hat",
-    image: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/ecommerce/accessories/Classic-Fedora-Hat-2.png",
-    price: 84.0,
-    quantity: 1,
-  },
-];
 
-const ShoppingCart = ({
-  initialItems = DEFAULT_ITEMS,
-}: {
-  initialItems?: CartItem[];
-}) => {
-  const [items, setItems] = useState(initialItems);
+const ShoppingCart = () => {
+  const [items, setItems] = useState([]);
 
   const removeItem = (id: string) => {
-    setItems(items.filter((item) => item.id !== id));
+    cartService.removeFromCart(id);
+    setItems(cartService.getCartItems());
   };
+
+  useEffect(() => {
+    setItems(cartService.getCartItems());
+  }, [])
 
   const subtotal = items.reduce(
     (sum, item) => sum + item.price * item.quantity,
@@ -71,8 +50,8 @@ const ShoppingCart = ({
           <p className="mb-8 text-muted-foreground">
             Looks like you haven't added anything yet.
           </p>
-          <Button asChild>
-            <a href="#">Continue Shopping</a>
+          <Button asChild className="cursor-pointer">
+            <Link href="/meals">Continue Shopping</Link>
           </Button>
         </div>
       </section>
@@ -93,7 +72,7 @@ const ShoppingCart = ({
               <div className="w-20 shrink-0">
                 <AspectRatio ratio={1} className="overflow-hidden rounded-md">
                   <img
-                    src={item.image}
+                    src={item.image_url}
                     alt={item.name}
                     className="size-full object-cover"
                   />
@@ -116,7 +95,7 @@ const ShoppingCart = ({
               <Button
                 variant="ghost"
                 size="icon"
-                className="shrink-0"
+                className="shrink-0 cursor-pointer"
                 onClick={() => removeItem(item.id)}
               >
                 <X className="size-4" />
@@ -133,8 +112,10 @@ const ShoppingCart = ({
             <span>{formatPrice(subtotal)}</span>
           </div>
 
-          <Button size="lg" className="w-full">
+          <Button size="lg" className="w-full cursor-pointer">
+            <Link href="/checkout">
             Checkout
+            </Link>
           </Button>
         </div>
       </div>

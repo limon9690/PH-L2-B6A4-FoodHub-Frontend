@@ -6,8 +6,7 @@ import { cookies } from "next/headers";
 
 export async function getMealsForCurrentProvider() {
     const cookieStore = await cookies();
-    //const session = userService.getSession();
-    //console.log(session);
+
 
     const provider = await fetch("http://localhost:5000/api/providers/me", {
         headers: {

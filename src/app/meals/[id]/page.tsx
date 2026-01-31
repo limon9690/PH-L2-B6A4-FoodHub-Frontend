@@ -1,20 +1,36 @@
+"use client"
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
-import { mealService } from '@/client-service/meal.service';
 import Link from 'next/link';
 import { Separator } from "@/components/ui/separator"
+import { cartService } from '@/client-service/cart.service';
+import { useParams } from 'next/navigation';
+import { useEffect, useState } from 'react';
 
-export default async function MealDetailPage({
-  params,
-}: {
-  params: Promise<{ id: string }>
-}) {
-    const {id} = await params;
-    const meal = await mealService.getSingleMeal(id);
-    console.log(meal);
+export default function MealDetailPage() {
+  const { id } = useParams();
+  const [meal, setMeal] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetch(`http://localhost:5000/api/meals/${id}`)
+      .then((res) => res.json())
+      .then((data) => {
+        setMeal(data);
+      }).finally(() => 
+      setLoading(false))
+  }, [id]);
+
+  const addToCartHandler = () => {
+    cartService.addToCart(meal);
+    console.log(cartService.getCartItems());
+  }
+
+    if (loading) return <div className="p-6">Loading...</div>;
+  if (!meal) return <div className="p-6">Meal not found</div>;
 
   return (
-<section className="container py-8 px-4 sm:px-6 lg:px-12">
+    <section className="container py-8 px-4 sm:px-6 lg:px-12">
       <div className="grid gap-8 lg:grid-cols-2">
         <div className="overflow-hidden rounded-xl border">
           <img
@@ -34,7 +50,7 @@ export default async function MealDetailPage({
 
           {/* Buttons */}
           <div className="mt-2 flex flex-col gap-3 sm:flex-row">
-            <Button variant="link" className="w-full sm:w-auto cursor-pointer">
+            <Button variant="link" className="w-full sm:w-auto cursor-pointer" onClick={addToCartHandler}>
               Add to cart
             </Button>
             <Button variant="link" className="w-full sm:w-auto cursor-pointer">Order now</Button>
@@ -43,7 +59,7 @@ export default async function MealDetailPage({
           <Separator className="my-4" />
 
           {/* Provider Card */}
-          <div  className="block">
+          <div className="block">
             <Card className="transition hover:bg-muted/40">
               <CardContent className="flex items-center justify-between p-4">
                 <div>
