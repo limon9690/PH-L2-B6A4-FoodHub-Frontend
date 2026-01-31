@@ -1,6 +1,8 @@
 "use client";
 
-import * as React from "react";
+import { ShoppingCart } from "lucide-react";
+
+
 import { Menu } from "lucide-react";
 
 import { cn } from "@/lib/utils";
@@ -17,6 +19,9 @@ import { ModeToggle } from "./ui/mode-toggler";
 import { authClient } from "@/lib/auth-client";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+import { useEffect, useState } from "react";
+import { cartService } from "@/service/cart.service";
+import { useCartCount } from "@/helper/cart-count";
 
 interface MenuItem {
   title: string;
@@ -55,6 +60,8 @@ const Navbar1 = ({
 
   const router = useRouter();
 
+  const cartCount = useCartCount();
+
   const handleLogout = async () => {
     await authClient.signOut({
       fetchOptions: {
@@ -79,6 +86,8 @@ const Navbar1 = ({
   if (isloggedIn && session?.user?.role === "USER") {
     publicMenu.push({ title: "Become A Provider", url: "/become-a-provider" });
   }
+
+
 
   return (
     <section className={cn("py-4", className)}>
@@ -109,11 +118,21 @@ const Navbar1 = ({
           </NavigationMenu>
 
           <div className="flex gap-2">
-            <Button variant="outline" size="sm">
-              <Link href="/cart">
-                Cart
+
+            <Button asChild variant="outline" size="icon" className="relative">
+              <Link href="/cart" aria-label="Cart">
+                <ShoppingCart className="h-4 w-4" />
+
+                {cartCount > 0 && (
+                  <span
+                    className="absolute -right-2 -top-2 flex h-5 w-5 items-center justify-center rounded-full bg-destructive text-[10px] font-semibold text-white"
+                  >
+                    {cartCount > 9 ? "9+" : cartCount}
+                  </span>
+                )}
               </Link>
             </Button>
+
 
             {
               !isloggedIn ? (
@@ -145,7 +164,7 @@ const Navbar1 = ({
           <div className="flex items-center justify-between">
             <Sheet>
               <SheetTrigger asChild>
-                <Button variant="outline" size="icon">
+                <Button variant="outline" className="cursor-pointer" size="icon">
                   <Menu className="size-4" />
                 </Button>
               </SheetTrigger>
@@ -165,6 +184,19 @@ const Navbar1 = ({
                         {item.title}
                       </Link>
                     ))}
+
+                    <Link href="/cart" className="relative inline-flex items-center">
+                      <Button variant="outline" className="cursor-pointer" size="icon">
+                        <ShoppingCart className="size-4" />
+                      </Button>
+
+                      {cartCount > 0 && (
+                        <span className="absolute -top-1 -right-1 flex h-5 min-w-5 items-center justify-center rounded-full bg-destructive px-1 text-xs font-medium text-white">
+                          {cartCount}
+                        </span>
+                      )}
+                    </Link>
+
                   </div>
 
                   {

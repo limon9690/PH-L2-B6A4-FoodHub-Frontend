@@ -8,6 +8,8 @@ import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { cartService } from "@/service/cart.service";
 import Link from "next/link";
+import { authClient } from "@/lib/auth-client";
+import { useRouter } from "next/navigation";
 
 interface CartItem {
   id: string;
@@ -20,6 +22,8 @@ interface CartItem {
 
 const ShoppingCart = () => {
   const [items, setItems] = useState([]);
+
+  const session = authClient.useSession();
 
   const removeItem = (id: string) => {
     cartService.removeFromCart(id);
@@ -41,6 +45,17 @@ const ShoppingCart = () => {
       currency: "USD",
     }).format(price);
   };
+
+  const router = useRouter();
+
+  const handleCheckoutButton = () => {
+    if (!session?.data) {
+      router.push("/login");
+      return;
+    }
+
+    router.push('/checkout');
+  }
 
   if (items.length === 0) {
     return (
@@ -112,10 +127,8 @@ const ShoppingCart = () => {
             <span>{formatPrice(subtotal)}</span>
           </div>
 
-          <Button size="lg" className="w-full cursor-pointer">
-            <Link href="/checkout">
-            Checkout
-            </Link>
+          <Button size="lg" className="w-full cursor-pointer" onClick={handleCheckoutButton}>
+              Checkout
           </Button>
         </div>
       </div>

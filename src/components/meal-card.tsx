@@ -1,4 +1,6 @@
-//import { Badge } from "@/components/ui/badge"
+"use client"
+
+import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import {
   Card,
@@ -8,10 +10,16 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
+import { cartService } from "@/service/cart.service";
 import Link from "next/link";
 
 export function MealCard(props) {
-    const meal = props.mealDetails;
+  const meal = props.mealDetails;
+
+  const addToCartHandler = () => {
+    cartService.addToCart(meal);
+  }
+
   return (
     <Card className="relative mx-auto w-full max-w-sm pt-0">
       <div className="absolute inset-0 z-30 aspect-video bg-black/35" />
@@ -29,11 +37,13 @@ export function MealCard(props) {
           {meal.details}
         </CardDescription>
       </CardHeader>
-      <CardFooter>
+      <CardFooter className="flex flex-col gap-5 sm:flex-row">
         <Link href={`/meals/${meal.id}`}>
-       
-        <Button className="w-full cursor-pointer">  View Details</Button>
+          <Button className="w-full cursor-pointer">  View Details</Button>
         </Link>
+        <Button className="cursor-pointer" onClick={addToCartHandler}>
+          Add to Cart
+        </Button>
       </CardFooter>
     </Card>
   )

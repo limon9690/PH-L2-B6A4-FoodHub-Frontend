@@ -6,6 +6,7 @@ export const cartService = {
 
     saveCartItems: (cartItem) => {
         localStorage.setItem('cartItems', JSON.stringify(cartItem));
+        cartService.notifyCartUpdate();
     },
 
     addToCart: (product) => {
@@ -19,6 +20,7 @@ export const cartService = {
         }
 
         cartService.saveCartItems(cartItems);
+        cartService.notifyCartUpdate();
     },
 
     removeFromCart: (productId) => {
@@ -27,10 +29,22 @@ export const cartService = {
             .filter((item) => item.id !== productId);
 
         cartService.saveCartItems(cartItems);
+        cartService.notifyCartUpdate();
     },
 
     clearCart: () => {
-        localStorage.removeItem('cartItem');
+        localStorage.removeItem('cartItems');
         cartService.saveCartItems([]);
+        cartService.notifyCartUpdate();
+    },
+    getCartCount: () => {
+        const cartItems = cartService.getCartItems();
+        return cartItems.reduce(
+            (sum, item) => sum + item.quantity,
+            0
+        );
+    },
+    notifyCartUpdate: () => {
+        window.dispatchEvent(new Event("cart-updated"));
     }
 }

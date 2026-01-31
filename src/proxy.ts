@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { userService } from "./service/user.service";
 
 export async function proxy(request: NextRequest) {
-    let isAuthenticated = false;
+  let isAuthenticated = false;
 
   const { data } = await userService.getSession();
 
@@ -10,14 +10,24 @@ export async function proxy(request: NextRequest) {
     isAuthenticated = true;
   }
 
-  //* User in not authenticated at all
   if (!isAuthenticated) {
     return NextResponse.redirect(new URL("/login", request.url));
   }
 
-    return NextResponse.next();
+  const role = data.user.role;
+  const path = request.nextUrl.pathname;
+
+  if (path.startsWith("/dashboard/provider") && role !== "PROVIDER") {
+    return NextResponse.redirect(new URL("/dashboard", request.url));
+  }
+
+  if (path.startsWith("/dashboard/admin") && role !== "ADMIN") {
+    return NextResponse.redirect(new URL("/dashboard", request.url));
+  }
+
+  return NextResponse.next();
 }
 
 export const config = {
-  matcher: ["/dashboard"], // Specify the routes the middleware applies to
+  matcher: ["/dashboard/:path*"],
 };

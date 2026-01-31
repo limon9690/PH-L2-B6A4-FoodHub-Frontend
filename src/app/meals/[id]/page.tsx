@@ -4,13 +4,15 @@ import { Card, CardContent } from '@/components/ui/card';
 import Link from 'next/link';
 import { Separator } from "@/components/ui/separator"
 import { cartService } from '@/service/cart.service';
-import { useParams } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
+import { router } from 'better-auth/api';
 
 export default function MealDetailPage() {
   const { id } = useParams();
   const [meal, setMeal] = useState(null);
   const [loading, setLoading] = useState(true);
+  const router = useRouter();
 
   useEffect(() => {
     fetch(`http://localhost:5000/api/meals/${id}`)
@@ -23,7 +25,6 @@ export default function MealDetailPage() {
 
   const addToCartHandler = () => {
     cartService.addToCart(meal);
-    console.log(cartService.getCartItems());
   }
 
     if (loading) return <div className="p-6">Loading...</div>;
