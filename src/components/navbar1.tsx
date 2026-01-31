@@ -60,7 +60,6 @@ const Navbar1 = ({
       fetchOptions: {
         onSuccess: () => {
           router.push("/");
-          //router.refresh();
         },
       },
     });
@@ -80,10 +79,6 @@ const Navbar1 = ({
   if (isloggedIn && session?.user?.role === "USER") {
     publicMenu.push({ title: "Become A Provider", url: "/become-a-provider" });
   }
-
-  // if (isloggedIn && session?.user?.role === "PROVIDER") {
-  //   publicMenu.push({title: "Manage Menu", url: "/provider/menu"})
-  // }
 
   return (
     <section className={cn("py-4", className)}>
@@ -113,32 +108,35 @@ const Navbar1 = ({
             </NavigationMenuList>
           </NavigationMenu>
 
-          {
-            !isloggedIn ? (
-              <div className="flex gap-2">
-                <Button asChild variant="outline" size="sm">
+          <div className="flex gap-2">
+            <Button variant="outline" size="sm">
+              <Link href="/cart">
+                Cart
+              </Link>
+            </Button>
+
+            {
+              !isloggedIn ? (
+                <><Button asChild variant="outline" size="sm">
                   <Link href={authNotLoggedIn.login.url}>{authNotLoggedIn.login.title}</Link>
                 </Button>
-                <Button asChild size="sm">
-                  <Link href={authNotLoggedIn.signup.url}>{authNotLoggedIn.signup.title}</Link>
-                </Button>
+                  <Button asChild size="sm">
+                    <Link href={authNotLoggedIn.signup.url}>{authNotLoggedIn.signup.title}</Link>
+                  </Button> </>
+              ) : (
+                <>
+                  <Button asChild variant="outline" size="sm">
+                    <Link href={authLoggedIn.dashboard.url}>{authLoggedIn.dashboard.title}</Link>
+                  </Button>
+                  <Button asChild size="sm" onClick={handleLogout}>
+                    <Link href={authLoggedIn.logout.url}>{authLoggedIn.logout.title}</Link>
+                  </Button>
+                </>
+              )
+            }
 
-                <ModeToggle />
-              </div>
-            ) : (
-              <div className="flex gap-2">
-                <Button asChild variant="outline" size="sm">
-                  <Link href={authLoggedIn.dashboard.url}>{authLoggedIn.dashboard.title}</Link>
-                </Button>
-                <Button asChild size="sm" onClick={handleLogout}>
-                  <Link href={authLoggedIn.logout.url}>{authLoggedIn.logout.title}</Link>
-                </Button>
-
-                <ModeToggle />
-              </div>
-            )
-          }
-
+            <ModeToggle />
+          </div>
 
         </nav>
 
@@ -179,7 +177,7 @@ const Navbar1 = ({
                         <Button asChild>
                           <Link href={authNotLoggedIn.signup.url}>{authNotLoggedIn.signup.title}</Link>
                         </Button>
-                        
+
                       </div>
                     ) : (
                       <div className="flex flex-col gap-3">
@@ -190,7 +188,7 @@ const Navbar1 = ({
                         <Button asChild onClick={handleLogout}>
                           <Link href={authLoggedIn.logout.url}>{authLoggedIn.logout.title}</Link>
                         </Button>
-                        
+
                       </div>
                     )
                   }

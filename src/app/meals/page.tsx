@@ -1,8 +1,36 @@
 import { MealCard } from "@/components/meal-card";
 import { mealService } from "@/client-service/meal.service"
+import MealsControls from "./meal-controls";
+import { categoryService } from "@/client-service/category.service";
 
-export default async function MealsPage() {
-  const meals = await mealService.getAllMeals();
+type SearchParams = {
+  searchParam? : string;
+  categoryId? : string;
+  minPrice? : number;
+  maxPrice? : number;
+  sortBy? : string;
+  sortOrder? : string;
+}
+
+export default async function MealsPage({
+  searchParams,
+} : {
+  searchParams : Promise<SearchParams>;
+}) {
+
+  const sp = await searchParams;
+
+  const query = {
+    searchParam : sp.searchParam ?? "",
+    categoryId: sp.categoryId ?? "",
+    minPirce : sp.minPrice ?? 1,
+    maxPrice : sp.maxPrice ?? 100000,
+    sortBy : sp.sortBy ?? "",
+    sortOrder : sp.sortOrder ?? ""
+  }
+
+  const meals = await mealService.getAllMeals(query);
+  const categories = await categoryService.getAllCategories();
   
   return (
         <section className="container py-10 px-4 sm:px-6 lg:px-12">
@@ -12,6 +40,8 @@ export default async function MealsPage() {
           Fresh, home-made meals from trusted providers
         </p>
       </div>
+
+      <MealsControls query = {query} categories = {categories}/>
 
       <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
         {meals.data.map((meal) => (

@@ -1,10 +1,20 @@
 const url = "http://localhost:5000/api/meals";
 
 export const mealService = {
-    getAllMeals: async () => {
-        const res = await fetch(url);
+    getAllMeals: async (query) => {
+        const qs = new URLSearchParams();
+        if (query?.searchParam) {
+            qs.set("searchParam", query.searchParam);
+        }
 
-        return res.json();
+        if (query?.categoryId) {
+            qs.set("categoryId", query.categoryId);
+        }
+
+        const res = await fetch(`http://localhost:5000/api/meals?${qs.toString()}`, {cache: "no-store"});
+
+        const result = await res.json();
+        return result;
     },
 
     getSingleMeal : async(mealId : string) => {
