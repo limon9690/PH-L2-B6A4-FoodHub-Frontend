@@ -13,8 +13,9 @@ type OptionType = {
 const optionsByRole = {
     admin: [
         { id: 1, path: '/dashboard', label: 'Overview' },
-        { id: 2, path: '/dashboard/admin/users', label: 'Manage Users' },
-        { id: 3, path: '/dashboard/admin/categories', label: 'Mange Categories' },
+        { id: 2, path: '/dashboard/orders', label: 'View All Orders' },
+        { id: 3, path: '/dashboard/admin/users', label: 'Manage Users' },
+        { id: 4, path: '/dashboard/admin/categories', label: 'Manage Categories' },
     ],
     user: [
         { id: 1, path: '/dashboard', label: 'Overview' },
