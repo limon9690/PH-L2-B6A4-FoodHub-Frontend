@@ -59,6 +59,10 @@ export function LoginForm() {
     },
   })
 
+  const handleForgetPassword = () => {
+    toast.info("Feature will be released soon!");
+  }
+
   return (
     <Card className="w-full sm:max-w-md">
       <CardHeader>
@@ -116,8 +120,9 @@ export function LoginForm() {
                     <div className="flex items-center">
                       <FieldLabel htmlFor={field.name}>Password</FieldLabel>
                       <Link
-                        href="/forgot-password"
+                        href=""
                         className="ml-auto text-sm underline-offset-4 hover:underline"
+                        onClick={handleForgetPassword}
                       >
                         Forgot your password?
                       </Link>

@@ -119,20 +119,23 @@ const Navbar1 = ({
 
           <div className="flex gap-2">
 
-            <Button asChild variant="outline" size="icon" className="relative">
-              <Link href="/cart" aria-label="Cart">
-                <ShoppingCart className="h-4 w-4" />
+            {
+              (session?.user?.role !== "PROVIDER" && session?.user?.role !== "ADMIN") && (
+                <Button asChild variant="outline" size="icon" className="relative">
+                  <Link href="/cart" aria-label="Cart">
+                    <ShoppingCart className="h-4 w-4" />
 
-                {cartCount > 0 && (
-                  <span
-                    className="absolute -right-2 -top-2 flex h-5 w-5 items-center justify-center rounded-full bg-destructive text-[10px] font-semibold text-white"
-                  >
-                    {cartCount > 9 ? "9+" : cartCount}
-                  </span>
-                )}
-              </Link>
-            </Button>
-
+                    {cartCount > 0 && (
+                      <span
+                        className="absolute -right-2 -top-2 flex h-5 w-5 items-center justify-center rounded-full bg-destructive text-[10px] font-semibold text-white"
+                      >
+                        {cartCount > 9 ? "9+" : cartCount}
+                      </span>
+                    )}
+                  </Link>
+                </Button>
+              )
+            }
 
             {
               !isloggedIn ? (

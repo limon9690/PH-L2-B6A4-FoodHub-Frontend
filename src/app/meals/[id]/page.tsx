@@ -7,6 +7,7 @@ import { cartService } from '@/service/cart.service';
 import { useParams, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { router } from 'better-auth/api';
+import { authClient } from '@/lib/auth-client';
 
 export default function MealDetailPage() {
   const { id } = useParams();
@@ -14,20 +15,22 @@ export default function MealDetailPage() {
   const [loading, setLoading] = useState(true);
   const router = useRouter();
 
+  const session = authClient.useSession();
+
   useEffect(() => {
     fetch(`http://localhost:5000/api/meals/${id}`)
       .then((res) => res.json())
       .then((data) => {
         setMeal(data);
-      }).finally(() => 
-      setLoading(false))
+      }).finally(() =>
+        setLoading(false))
   }, [id]);
 
   const addToCartHandler = () => {
     cartService.addToCart(meal);
   }
 
-    if (loading) return <div className="p-6">Loading...</div>;
+  if (loading) return <div className="p-6">Loading...</div>;
   if (!meal) return <div className="p-6">Meal not found</div>;
 
   return (
@@ -50,12 +53,16 @@ export default function MealDetailPage() {
           <p className="text-muted-foreground">{meal.details}</p>
 
           {/* Buttons */}
-          <div className="mt-2 flex flex-col gap-3 sm:flex-row">
-            <Button variant="link" className="w-full sm:w-auto cursor-pointer" onClick={addToCartHandler}>
-              Add to cart
-            </Button>
-            <Button variant="link" className="w-full sm:w-auto cursor-pointer">Order now</Button>
-          </div>
+          {
+            (session?.data?.user?.role !== "PROVIDER" && session?.data?.user?.role !== "ADMIN") && (
+              <div className="mt-2 flex flex-col gap-3 sm:flex-row">
+                <Button variant="link" className="w-full sm:w-auto cursor-pointer" onClick={addToCartHandler}>
+                  Add to cart
+                </Button>
+                <Button variant="link" className="w-full sm:w-auto cursor-pointer">Order now</Button>
+              </div>
+            )
+          }
 
           <Separator className="my-4" />
 

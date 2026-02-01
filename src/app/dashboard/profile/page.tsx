@@ -61,7 +61,7 @@ export default function ProfilePage() {
                 setProviderData({
                     shopName: getProviderData?.shopName ?? ""
                 });
-                console.log(getProviderData)
+                // console.log(getProviderData)
             }
         };
         load();

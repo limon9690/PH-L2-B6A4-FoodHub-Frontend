@@ -10,6 +10,7 @@ import { cartService } from "@/service/cart.service";
 import Link from "next/link";
 import { authClient } from "@/lib/auth-client";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 interface CartItem {
   id: string;
@@ -54,8 +55,17 @@ const ShoppingCart = () => {
       return;
     }
 
+    if (session?.data) {
+      if (session?.data?.user?.role !== "USER") {
+        toast.error("Only customers can place orders!");
+        router.push("/dashboard");
+        return;
+      }
+    }
+
     router.push('/checkout');
   }
+
 
   if (items.length === 0) {
     return (
@@ -128,7 +138,7 @@ const ShoppingCart = () => {
           </div>
 
           <Button size="lg" className="w-full cursor-pointer" onClick={handleCheckoutButton}>
-              Checkout
+            Checkout
           </Button>
         </div>
       </div>

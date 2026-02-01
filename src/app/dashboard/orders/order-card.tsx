@@ -64,6 +64,8 @@ export function OrderCard({ order }) {
     load();
   }, []);
 
+  // console.log(orderDetails);
+
   if (loading) return <div>Loading...</div>;
 
   const handleCancelOrder = async () => {

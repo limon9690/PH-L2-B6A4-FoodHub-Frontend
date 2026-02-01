@@ -10,11 +10,13 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
+import { authClient } from "@/lib/auth-client";
 import { cartService } from "@/service/cart.service";
 import Link from "next/link";
 
 export function MealCard(props) {
   const meal = props.mealDetails;
+  const session = authClient.useSession();
 
   const addToCartHandler = () => {
     cartService.addToCart(meal);
@@ -41,9 +43,13 @@ export function MealCard(props) {
         <Link href={`/meals/${meal.id}`}>
           <Button className="w-full cursor-pointer">  View Details</Button>
         </Link>
-        <Button className="cursor-pointer" onClick={addToCartHandler}>
-          Add to Cart
-        </Button>
+        {
+          session?.data?.user?.role === "USER" && (
+            <Button className="cursor-pointer" onClick={addToCartHandler}>
+              Add to Cart
+            </Button>
+          )
+        }
       </CardFooter>
     </Card>
   )
