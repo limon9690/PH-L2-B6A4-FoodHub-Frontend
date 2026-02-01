@@ -1,4 +1,4 @@
-const url = "http://localhost:5000/api/providers";
+const url = `${process.env.NEXT_PUBLIC_API_URL ?? process.env.API_URL}/providers`;
 
 export const providerService = {
     getAllProviders: async () => {

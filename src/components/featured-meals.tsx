@@ -11,7 +11,7 @@ import { mealService } from "@/service/meal.service"
 import { MealCard } from "./meal-card";
 
 export async function FeaturedMeals() {
-    const res = await mealService.getAllMeals();
+    const res = await mealService.getAllMeals({});
 
     const featuredMeals = res.data.slice(0, 5);
 

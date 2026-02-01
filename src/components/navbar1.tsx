@@ -19,8 +19,6 @@ import { ModeToggle } from "./ui/mode-toggler";
 import { authClient } from "@/lib/auth-client";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
-import { useEffect, useState } from "react";
-import { cartService } from "@/service/cart.service";
 import { useCartCount } from "@/helper/cart-count";
 
 interface MenuItem {

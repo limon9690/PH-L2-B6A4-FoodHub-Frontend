@@ -13,7 +13,6 @@ export default async function OrderDetailsPage({
   params: Promise<{ id: string }>
 }) {
   const {id} = await params;
-  console.log(id);
 
   const orderDetails = await orderServiceServer.getOrderDetails(id);
   const userDetails = await userService.getUserDetails();

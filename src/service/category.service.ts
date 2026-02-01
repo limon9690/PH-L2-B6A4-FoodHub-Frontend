@@ -1,4 +1,5 @@
-const url = "http://localhost:5000/api/categories";
+const url = `${  process.env.NEXT_PUBLIC_API_URL ??
+  process.env.API_URL}/categories`;
 
 export const categoryService = {
     getAllCategories: async () => {

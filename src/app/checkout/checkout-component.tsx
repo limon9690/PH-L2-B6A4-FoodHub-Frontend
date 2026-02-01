@@ -61,8 +61,6 @@ export function CheckoutComponent({ user, address }) {
         }
         )
 
-        console.log(items);
-
         const result = await orderService.createOrder(requestBody);
 
         if (result?.error) {

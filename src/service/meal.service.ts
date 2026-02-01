@@ -1,4 +1,6 @@
-const url = "http://localhost:5000/api/meals";
+const url = `${  process.env.NEXT_PUBLIC_API_URL ??
+  process.env.API_URL}/meals`;
+
 
 export const mealService = {
     getAllMeals: async (query) => {
@@ -11,7 +13,7 @@ export const mealService = {
             qs.set("categoryId", query.categoryId);
         }
 
-        const res = await fetch(`http://localhost:5000/api/meals?${qs.toString()}`, {cache: "no-store"});
+        const res = await fetch(`${url}?${qs.toString()}`, {cache: "no-store"});
 
         const result = await res.json();
         return result;
@@ -24,7 +26,7 @@ export const mealService = {
     },
 
     createMeal : async(data) => {
-        let response = await fetch("http://localhost:5000/api/provider/meals", {
+        let response = await fetch(`${url}/provider/meals`, {
             method: 'POST',
             credentials: "include",
             body: JSON.stringify(data),
@@ -38,7 +40,7 @@ export const mealService = {
     },
 
     updateMeal : async (data, mealId ) => {
-        let response = await fetch(`http://localhost:5000/api/provider/meals/${mealId}`, {
+        let response = await fetch(`${url}/provider/meals/${mealId}`, {
             method: 'PUT',
             credentials: 'include',
             body: JSON.stringify(data),
@@ -52,7 +54,7 @@ export const mealService = {
     },
 
     deleteMeal : async (mealId) => {
-        let response = await fetch(`http://localhost:5000/api/provider/meals/${mealId}`, {
+        let response = await fetch(`${url}/provider/meals/${mealId}`, {
             method: 'DELETE',
             credentials: 'include',
         })

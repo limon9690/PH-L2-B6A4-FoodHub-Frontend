@@ -6,19 +6,18 @@ import { Separator } from "@/components/ui/separator"
 import { cartService } from '@/service/cart.service';
 import { useParams, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import { router } from 'better-auth/api';
 import { authClient } from '@/lib/auth-client';
+import { categoryService } from '@/service/category.service';
 
 export default function MealDetailPage() {
   const { id } = useParams();
   const [meal, setMeal] = useState(null);
   const [loading, setLoading] = useState(true);
-  const router = useRouter();
 
   const session = authClient.useSession();
 
   useEffect(() => {
-    fetch(`http://localhost:5000/api/meals/${id}`)
+    fetch(`${process.env.NEXT_PUBLIC_API_URL}/meals/${id}`)
       .then((res) => res.json())
       .then((data) => {
         setMeal(data);
@@ -59,7 +58,7 @@ export default function MealDetailPage() {
                 <Button variant="link" className="w-full sm:w-auto cursor-pointer" onClick={addToCartHandler}>
                   Add to cart
                 </Button>
-                <Button variant="link" className="w-full sm:w-auto cursor-pointer">Order now</Button>
+                {/* <Button variant="link" className="w-full sm:w-auto cursor-pointer">Order now</Button> */}
               </div>
             )
           }

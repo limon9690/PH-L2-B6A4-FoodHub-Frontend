@@ -1,6 +1,9 @@
+const url =   process.env.NEXT_PUBLIC_API_URL ?? process.env.API_URL;;
+
 export const orderService = {
      createOrder : async(data) => {
-        let response = await fetch("http://localhost:5000/api/orders", {
+     console.log(url);
+        let response = await fetch(`${url}/orders`, {
             method: 'POST',
             credentials: "include",
             body: JSON.stringify(data),
@@ -14,7 +17,7 @@ export const orderService = {
     },
 
     getOrder : async () => {
-        let response = await fetch("http://localhost:5000/api/orders", {
+        let response = await fetch(`${url}/orders`, {
             method: 'GET',
             credentials: "include"
         });
@@ -24,7 +27,7 @@ export const orderService = {
     },
 
     getOrderDetails: async (orderId) => {
-        let response = await fetch(`http://localhost:5000/api/orders/${orderId}`, {
+        let response = await fetch(`${url}/orders/${orderId}`, {
             method: 'GET',
             credentials: "include"
         });

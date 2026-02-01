@@ -1,4 +1,5 @@
 import { cookies } from "next/headers";
+const url = process.env.NEXT_PUBLIC_API_URL ?? process.env.API_URL;;
 
 
 export const userService = {
@@ -6,7 +7,7 @@ export const userService = {
     try {
       const cookieStore = await cookies();
 
-      const res = await fetch(`http://localhost:5000/api/auth/get-session`, {
+      const res = await fetch(`${url}/auth/get-session`, {
         headers: {
           Cookie: cookieStore.toString(),
         },
@@ -26,14 +27,27 @@ export const userService = {
     }
   },
 
-  getUserDetails: async function() {
+  getUserDetails: async function () {
     const session = await userService.getSession();
     return session?.data?.user;
   },
 
-  getUserAddress : async function(userId) {
+  getUserAddress: async function (userId) {
     const cookieStore = await cookies();
-    const data = await fetch("http://localhost:5000/api/addresses", {
+    const data = await fetch(`${url}/addresses`, {
+      headers: {
+        Cookie: cookieStore.toString()
+      },
+      cache: "no-store"
+    })
+
+    const result = data.json();
+    return result;
+  },
+
+  getAllUsers : async function() {
+    const cookieStore = await cookies();
+    const data = await fetch(`${url}/admin/users`, {
       headers: {
         Cookie: cookieStore.toString()
       },

@@ -1,11 +1,13 @@
 import { cookies } from "next/headers";
+const url =   process.env.NEXT_PUBLIC_API_URL ??
+  process.env.API_URL;;
 
 export const orderServiceServer = {
     getOrderDetails: async (orderId: string) => {
         const cookieStore = await cookies();
 
         const res = await fetch(
-            `http://localhost:5000/api/orders/${orderId}`,
+            `${url}/orders/${orderId}`,
             {
                 method: "GET",
                 headers: {
@@ -21,7 +23,7 @@ export const orderServiceServer = {
         const cookieStore = await cookies();
 
         const res = await fetch(
-            `http://localhost:5000/api/addresses/${userId}`,
+            `${url}/addresses/${userId}`,
             {
                 method: "GET",
                 headers: {

@@ -1,7 +1,6 @@
-import React from 'react'
+// app/dashboard/provider/page.tsx
+import { redirect } from "next/navigation";
 
-export default function Provider() {
-  return (
-    <div>Provider</div>
-  )
+export default function ProviderIndexPage() {
+  redirect("/dashboard");
 }

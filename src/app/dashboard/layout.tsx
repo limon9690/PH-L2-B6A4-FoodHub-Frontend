@@ -1,13 +1,13 @@
 'use client'
-import type { ReactNode } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 import { Separator } from "@/components/ui/separator";
 import { authClient } from "@/lib/auth-client";
 import Link from "next/link";
 
 type OptionType = {
-    id : number;
-    path : string;
-    label : string;
+    id: number;
+    path: string;
+    label: string;
 }
 
 const optionsByRole = {
@@ -34,13 +34,18 @@ const optionsByRole = {
 export default function DashboardLayout({ children }: { children: ReactNode }) {
 
     const { data: session } = authClient.useSession();
-    let options : OptionType[] = [];
+    let options: OptionType[] = [];
+
+    const [mounted, setMounted] = useState(false);
+    useEffect(() => setMounted(true), []);
+
     const user = session?.user;
+    const role = mounted ? user?.role : null;
 
     if (user) {
-        if (user?.role === "USER") {
+        if (role === "USER") {
             options = optionsByRole.user;
-        } else if (user?.role === "PROVIDER") {
+        } else if (role === "PROVIDER") {
             options = optionsByRole.provider;
         } else {
             options = optionsByRole.admin;
@@ -59,7 +64,7 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
                                     Dashboard
                                 </div>
                                 <div className="mt-1 text-sm text-muted-foreground">
-                                    {user?.role}
+                                    {role}
                                 </div>
                             </div>
 
@@ -68,12 +73,12 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
                             <nav className="p-2">
                                 {
                                     options.map(opt => (
-                                        <Link key = {opt.id}
-                                    href={opt.path}
-                                    className="block rounded-lg px-3 py-2 text-sm hover:bg-muted"
-                                    >
-                                        {opt.label}
-                                </Link>
+                                        <Link key={opt.id}
+                                            href={opt.path}
+                                            className="block rounded-lg px-3 py-2 text-sm hover:bg-muted"
+                                        >
+                                            {opt.label}
+                                        </Link>
                                     ))
                                 }
                             </nav>
