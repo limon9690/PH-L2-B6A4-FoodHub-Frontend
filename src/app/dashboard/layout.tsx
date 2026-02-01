@@ -64,7 +64,7 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
                                     Dashboard
                                 </div>
                                 <div className="mt-1 text-sm text-muted-foreground">
-                                    {role}
+                                    {role ?? " "}
                                 </div>
                             </div>
 
@@ -72,14 +72,19 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
 
                             <nav className="p-2">
                                 {
-                                    options.map(opt => (
-                                        <Link key={opt.id}
-                                            href={opt.path}
-                                            className="block rounded-lg px-3 py-2 text-sm hover:bg-muted"
-                                        >
-                                            {opt.label}
-                                        </Link>
-                                    ))
+                                    !mounted ? (
+                                        <div className="px-3 py-2 text-sm text-muted-foreground">
+                                            Loading…
+                                        </div>
+                                    ) : (
+                                        options.map(opt => (
+                                            <Link key={opt.id}
+                                                href={opt.path}
+                                                className="block rounded-lg px-3 py-2 text-sm hover:bg-muted"
+                                            >
+                                                {opt.label}
+                                            </Link>
+                                        )))
                                 }
                             </nav>
                         </div>

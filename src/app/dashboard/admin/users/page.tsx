@@ -4,7 +4,6 @@ import { UserSummaryCard } from './user-card';
 
 export default async function page() {
   const users = await userService.getAllUsers();
-  console.log(users);
   return (
         <div className="space-y-6">
       {/* Header */}

@@ -45,7 +45,7 @@ export const userService = {
     return result;
   },
 
-  getAllUsers : async function() {
+  getAllUsers: async function () {
     const cookieStore = await cookies();
     const data = await fetch(`${url}/admin/users`, {
       headers: {
@@ -56,6 +56,6 @@ export const userService = {
 
     const result = data.json();
     return result;
-  }
+  },
 };
 

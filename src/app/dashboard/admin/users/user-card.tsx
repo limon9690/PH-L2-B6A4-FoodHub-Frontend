@@ -1,11 +1,58 @@
+"use client";
+
+import { useState } from "react";
+import { toast } from "sonner";
+
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { ChangeStatusDialog } from "./status-change-dialogue";
+import { adminService } from "@/service/admin.service";
+import { router } from "better-auth/api";
+import { useRouter } from "next/navigation";
+
+
 
 export function UserSummaryCard({ user }) {
+  const [open, setOpen] = useState(false);
+  const [nextStatus, setNextStatus] = useState(null);
+  const router = useRouter();
+
+  const [status, setStatus] = useState(user.status);
+
+  const handlePick = (v) => {
+    if (v === status) return;
+    setNextStatus(v);
+    setOpen(true);
+  };
+
+  const confirm = async () => {
+    if (!nextStatus) return;
+
+    try {
+      const result = await adminService.updateUserStatus(user.id, {status: nextStatus});
+
+      if (result?.error) {
+        toast.error(result?.error?.message);
+      }
+
+      setStatus(nextStatus);
+      toast.success(`Status updated to ${nextStatus}`);
+      router.refresh();
+    } finally {
+      setOpen(false);
+      setNextStatus(null);
+    }
+  };
+
   const statusVariant =
-    user.status === "ACTIVE"
-      ? "default"
-      : "SUSPENDED"
+    status === "ACTIVE" ? "default" : "destructive";
 
   return (
     <Card className="rounded-xl">
@@ -15,7 +62,7 @@ export function UserSummaryCard({ user }) {
 
           <div className="flex flex-wrap items-center gap-2">
             <Badge variant="outline">{user.role}</Badge>
-            <Badge variant={statusVariant as any}>{user.status}</Badge>
+            <Badge variant={statusVariant as any}>{status}</Badge>
           </div>
         </div>
       </CardHeader>
@@ -37,6 +84,31 @@ export function UserSummaryCard({ user }) {
             {user.id}
           </span>
         </div>
+
+
+        <div className="flex items-center justify-between gap-4">
+          <span className="text-muted-foreground">Status</span>
+
+          <Select value={status} onValueChange={handlePick}>
+            <SelectTrigger className="w-[140px]">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="ACTIVE">Active</SelectItem>
+              <SelectItem value="SUSPEND">Suspend</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+
+        <ChangeStatusDialog
+          open={open}
+          onOpenChange={(v) => {
+            if (!v) setNextStatus(null);
+            setOpen(v);
+          }}
+          nextStatus={nextStatus}
+          onConfirm={confirm}
+        />
       </CardContent>
     </Card>
   );
