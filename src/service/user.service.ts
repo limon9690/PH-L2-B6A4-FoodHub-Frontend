@@ -1,5 +1,5 @@
 import { cookies } from "next/headers";
-const url = process.env.NEXT_PUBLIC_API_URL ?? process.env.API_URL;;
+const url = process.env.API_URL;
 
 
 export const userService = {
@@ -11,6 +11,7 @@ export const userService = {
         headers: {
           Cookie: cookieStore.toString(),
         },
+        credentials: "include",
         cache: "no-store",
       });
 
@@ -41,7 +42,7 @@ export const userService = {
       cache: "no-store"
     })
 
-    const result = data.json();
+    const result = await data.json();
     return result;
   },
 
@@ -54,7 +55,8 @@ export const userService = {
       cache: "no-store"
     })
 
-    const result = data.json();
+    const result = await data.json();
+    console.log(result);
     return result;
   },
 };

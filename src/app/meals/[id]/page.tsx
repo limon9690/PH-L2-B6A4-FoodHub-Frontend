@@ -7,7 +7,7 @@ import { cartService } from '@/service/cart.service';
 import { useParams, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { authClient } from '@/lib/auth-client';
-import { categoryService } from '@/service/category.service';
+import { getSingleMeal } from '@/service/meal.service';
 
 export default function MealDetailPage() {
   const { id } = useParams();
@@ -17,12 +17,19 @@ export default function MealDetailPage() {
   const session = authClient.useSession();
 
   useEffect(() => {
-    fetch(`${process.env.NEXT_PUBLIC_API_URL}/meals/${id}`)
-      .then((res) => res.json())
-      .then((data) => {
-        setMeal(data);
-      }).finally(() =>
-        setLoading(false))
+    // fetch(`${process.env.NEXT_PUBLIC_API_URL}/meals/${id}`)
+    //   .then((res) => res.json())
+    //   .then((data) => {
+    //     setMeal(data);
+    //   }).finally(() =>
+    //     setLoading(false))
+
+    const load = async() => {
+      const result = await getSingleMeal(id as string);
+      setMeal(result);
+      setLoading(false);
+    }
+    load();
   }, [id]);
 
   const addToCartHandler = () => {

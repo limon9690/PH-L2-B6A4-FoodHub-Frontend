@@ -1,8 +1,9 @@
 import { OrderCard } from './order-card';
-import { cancelOrder, getOrders } from './action';
+import {getOrders } from './action';
 
 export default async function OrdersPage() {
     const orders = await getOrders() ?? [];
+    console.log(orders);
 
     return (
         <section className="container py-10">
@@ -14,12 +15,12 @@ export default async function OrdersPage() {
             </div>
 
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                {orders.map((order) => (
+                { orders && (orders.map((order) => (
                     <OrderCard
                         key={order.id}
                         order={order}
                     />
-                ))}
+                )))}
             </div>
         </section>
     )

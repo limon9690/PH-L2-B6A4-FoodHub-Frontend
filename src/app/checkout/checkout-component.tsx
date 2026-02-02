@@ -6,7 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { cartService } from "@/service/cart.service";
-import { orderService } from "@/service/order.service";
+import { createOrder } from "@/service/order.service";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 
@@ -61,7 +61,7 @@ export function CheckoutComponent({ user, address }) {
         }
         )
 
-        const result = await orderService.createOrder(requestBody);
+        const result = await createOrder(requestBody);
 
         if (result?.error) {
             toast.error(result?.error?.message);

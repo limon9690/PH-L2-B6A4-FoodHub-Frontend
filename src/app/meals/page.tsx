@@ -1,7 +1,8 @@
 import { MealCard } from "@/components/meal-card";
-import { mealService } from "@/service/meal.service"
+import { getAllMeals, mealService } from "@/service/meal.service"
 import MealsControls from "./meal-controls";
-import { categoryService } from "@/service/category.service";
+import { getAllCategories } from "@/service/category.service";
+
 
 type SearchParams = {
   searchParam? : string;
@@ -29,8 +30,8 @@ export default async function MealsPage({
     sortOrder : sp.sortOrder ?? ""
   }
 
-  const meals = await mealService.getAllMeals(query);
-  const categories = await categoryService.getAllCategories();
+  const meals = await getAllMeals(query);
+  const categories = await getAllCategories();
   
   return (
         <section className="container py-10 px-4 sm:px-6 lg:px-12">

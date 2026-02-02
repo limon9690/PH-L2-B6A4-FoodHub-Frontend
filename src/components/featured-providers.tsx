@@ -7,11 +7,11 @@ import {
     CarouselNext,
     CarouselPrevious,
 } from "@/components/ui/carousel"
-import { providerService } from "@/service/providers.service";
+import { getAllProviders } from "@/service/providers.service";
 import ProviderCard from "./provider-card";
 
 export async function FeaturedProviders() {
-    const res = await providerService.getAllProviders();
+    const res = await getAllProviders();
 
     const featuredProviders = res.slice(0, 5);
 

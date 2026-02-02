@@ -3,9 +3,8 @@ import { Button } from '@/components/ui/button'
 import { Pencil, Trash2 } from 'lucide-react'
 import Link from 'next/link';
 import { DeleteCategoryDialogue } from './[id]/delete-category-dialogue';
-import { categoryService } from '@/service/category.service';
+import { deleteCategory } from '@/service/category.service';
 import { toast } from 'sonner';
-import { router } from 'better-auth/api';
 import { useRouter } from 'next/navigation';
 
 
@@ -13,10 +12,11 @@ export function CategoryCard({ category }) {
   const router = useRouter();
   const isDeleting = false;
   const handleDelete = async () => {
-    const result = categoryService.deleteCategory(category.id);
+    const result = await deleteCategory(category.id);
 
     if (result?.error) {
       toast.error(result?.error?.message);
+      return;
     }
 
     toast.success("Category deleted successfully!");

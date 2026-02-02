@@ -1,7 +1,7 @@
 import { MealCard } from '@/components/meal-card';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { providerService } from '@/service/providers.service';
+import { getSingleProvider } from '@/service/providers.service';
 import Link from 'next/link';
 
 export default async function ProviderDetailsPage({
@@ -10,7 +10,7 @@ export default async function ProviderDetailsPage({
   params: Promise<{ id: string }>
 }) {
     const {id} = await params;
-    const provider = await providerService.getSingleProvider(id);
+    const provider = await getSingleProvider(id);
     const meals = await provider.meals;
     console.log(provider);
   return (

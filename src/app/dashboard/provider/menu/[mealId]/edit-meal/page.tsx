@@ -1,4 +1,4 @@
-import { mealService } from '@/service/meal.service';
+import { getSingleMeal } from '@/service/meal.service';
 import React from 'react'
 import { UpdateMealForm } from './update-meal-form';
 
@@ -9,7 +9,7 @@ export default async function UpdateMealPage({
 }) {
     const { mealId } = await params;
 
-    const meal = await mealService.getSingleMeal(mealId);
+    const meal = await getSingleMeal(mealId);
     return (
         <div>
             <UpdateMealForm

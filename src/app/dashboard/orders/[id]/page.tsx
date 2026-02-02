@@ -2,10 +2,10 @@ import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-import { orderService } from "@/service/order.service";
+
 import { orderServiceServer } from "@/service/order.server";
 import { userService } from "@/service/user.service";
-import { providerService } from "@/service/providers.service";
+import { getSingleProvider } from "@/service/providers.service";
 
 export default async function OrderDetailsPage({
   params,
@@ -16,7 +16,7 @@ export default async function OrderDetailsPage({
 
   const orderDetails = await orderServiceServer.getOrderDetails(id);
   const userDetails = await userService.getUserDetails();
-  const providerDetails = await providerService.getSingleProvider(orderDetails.providerId);
+  const providerDetails = await getSingleProvider(orderDetails.providerId);
   const providerAddress = await orderServiceServer.getProviderAddress(providerDetails.userId);
 
   const order = {

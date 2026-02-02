@@ -12,7 +12,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Field, FieldError, FieldGroup, FieldLabel } from "@/components/ui/field"
 import Link from "next/link"
-import { providerService } from "@/service/providers.service"
+import { createProvider } from "@/service/providers.service"
 import { authClient } from "@/lib/auth-client"
 
 const schema = z.object({
@@ -31,16 +31,19 @@ export default function BecomeProviderPage() {
       onSubmit: schema,
     },
     onSubmit: async ({ value }) => {
-      const result = await providerService.createProvider(value);
+      const result = await createProvider(value);
 
-      if (result.error) {
+      if (result?.error) {
         if (result.error.code === "DUPLICATE_RESOURCE") {
           toast.error("Shop name is already taken. Try a different one!");
+          return;
         }
       } else {
-        toast("Congratulations! You are now a provider");
+        toast.success("Congratulations! You are now a provider");
+
+        await authClient.getSession({ query: { disableCookieCache: true } });
         await refetch();
-        router.push('/providers');
+        router.push('/dashboard');
         router.refresh();
       }
     },
@@ -60,9 +63,9 @@ export default function BecomeProviderPage() {
           <CardContent>
             <form
               id="become-provider-form"
-              onSubmit={(e) => {
+              onSubmit={async (e) => {
                 e.preventDefault()
-                form.handleSubmit()
+                await form.handleSubmit()
               }}
               className="space-y-4"
             >

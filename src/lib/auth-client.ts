@@ -1,5 +1,18 @@
-import { createAuthClient } from "better-auth/react"
+// "use client"
+import { nextCookies } from "better-auth/next-js";
+import { createAuthClient } from "better-auth/react";
+
+const getBaseURL = () => {
+  if (typeof window !== "undefined") {
+    return window.location.origin;
+  }
+  return "https://foodhub-backend-mu.vercel.app";
+};
+
 export const authClient = createAuthClient({
-    /** The base URL of the server (optional if you're using the same domain) */
-    baseURL: "http://localhost:5000"
-})
+  //baseURL: getBaseURL(),
+  baseURL: typeof window !== "undefined" ? window.location.origin : "",
+  fetchOptions: {
+    credentials: "include",
+  }
+});

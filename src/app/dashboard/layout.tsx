@@ -27,7 +27,6 @@ const optionsByRole = {
         { id: 2, path: '/dashboard/profile', label: 'Manage Profile' },
         { id: 3, path: '/dashboard/orders', label: 'Manage Orders' },
         { id: 4, path: '/dashboard/provider/menu', label: 'Manage Menu' },
-        { id: 5, path: '/dashboard/statistics', label: 'Statistics' }
     ],
 };
 

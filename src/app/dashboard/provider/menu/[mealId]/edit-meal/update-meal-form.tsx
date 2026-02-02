@@ -6,7 +6,6 @@ import * as z from "zod"
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
 import { Card } from "@/components/ui/card";
@@ -26,8 +25,8 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select";
-import { categoryService } from "@/service/category.service";
-import { mealService } from "@/service/meal.service";
+import { getAllCategories } from "@/service/category.service";
+import {updateMeal } from "@/service/meal.service";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 
@@ -49,7 +48,6 @@ export function UpdateMealForm({
     mealId
 }: {
     submitLabel?: string;
-    // onSubmit: (values: MealFormValues) => void;
     initialValues?: Partial<MealFormValues>;
     mealId : string
 }) {
@@ -68,7 +66,7 @@ export function UpdateMealForm({
             onSubmit: mealSchema,
         },
         onSubmit: async ({ value }) => {
-            const result = await mealService.updateMeal(value, mealId);
+            const result = await updateMeal(value, mealId);
 
             if (result?.error) {
               toast.error(result?.error?.message);
@@ -88,7 +86,7 @@ export function UpdateMealForm({
 
     React.useEffect(() => {
         const load = async () => {
-            const categoryData = await categoryService.getAllCategories();
+            const categoryData = await getAllCategories();
             setCategory(categoryData)
         }
         load();
@@ -96,9 +94,9 @@ export function UpdateMealForm({
 
     return (
         <form
-            onSubmit={(e) => {
+            onSubmit={async (e) => {
                 e.preventDefault();
-                form.handleSubmit();
+                await form.handleSubmit();
             }}
             className="space-y-4"
         >

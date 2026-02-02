@@ -9,13 +9,14 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
 import { Field, FieldError, FieldLabel } from "@/components/ui/field";
-import { categoryService } from "@/service/category.service";
+import { createCategory } from "@/service/category.service";
+
 
 const categorySchema = z.object({
   name: z
     .string()
     .min(4, "Name is required.")
-    .max(15, "Max 40 characters."),
+    .max(50, "Max 50 characters."),
 });
 
 export type CategoryFormValues = z.infer<typeof categorySchema>;
@@ -37,9 +38,8 @@ export default function CreateCategoryForm({
       onSubmit: categorySchema,
     },
     onSubmit: async ({ value }) => {
-      const payload = { name: value.name.trim() };
 
-      const result = await categoryService.createCategory(payload);
+      const result = await createCategory(value);
 
       if (result?.error) {
         toast.error(result.error.message);
@@ -48,6 +48,7 @@ export default function CreateCategoryForm({
 
       toast.success("Category saved successfully!");
       router.push("/dashboard/admin/categories");
+      //router.refresh();
     },
   });
 
@@ -57,9 +58,9 @@ export default function CreateCategoryForm({
 
   return (
     <form
-      onSubmit={(e) => {
+      onSubmit={async (e) => {
         e.preventDefault();
-        form.handleSubmit();
+        await form.handleSubmit();
       }}
       className="space-y-4"
     >

@@ -1,11 +1,11 @@
-import { categoryService } from '@/service/category.service'
+import { getAllCategories } from '@/service/category.service'
 import { CategoryCard } from './category-card';
 import { Button } from '@/components/ui/button';
 import { Plus } from 'lucide-react';
 import Link from 'next/link';
 
 export default async function CategoryPage() {
-    const categories = await categoryService.getAllCategories();
+    const categories = await getAllCategories() ?? [];
     
     return (
         <div className="space-y-6">

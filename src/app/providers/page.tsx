@@ -1,11 +1,12 @@
 import ProviderCard from '@/components/provider-card';
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
-import { providerService } from '@/service/providers.service'
+import { getAllProviders, } from '@/service/providers.service'
 import Link from 'next/link'
 
 export default async function ProvidersPage() {
-    const providers = await providerService.getAllProviders();
+    const providers = await getAllProviders();
+    console.log(providers);
     return (
         <section className="container py-10 px-4 sm:px-6 lg:px-12">
             {/* Header */}

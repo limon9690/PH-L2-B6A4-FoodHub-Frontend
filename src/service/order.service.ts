@@ -1,38 +1,50 @@
-const url =   process.env.NEXT_PUBLIC_API_URL ?? process.env.API_URL;;
+"use server"
+import { cookies } from "next/headers";
 
-export const orderService = {
-     createOrder : async(data) => {
-     console.log(url);
-        let response = await fetch(`${url}/orders`, {
-            method: 'POST',
-            credentials: "include",
-            body: JSON.stringify(data),
-            headers: {
-                'Content-type' : 'application/json'
-            }
-        });
+const url = process.env.NEXT_PUBLIC_API_URL ?? process.env.API_URL;
 
-        response = await response.json();
-        return response;
-    },
+export const createOrder = async (data) => {
+    const cookieStore = await cookies();
+    let response = await fetch(`${url}/orders`, {
+        method: 'POST',
+        credentials: "include",
+        body: JSON.stringify(data),
+        headers: {
+            'Content-type': 'application/json',
+            Cookie: cookieStore.toString()
+        }
+    });
 
-    getOrder : async () => {
-        let response = await fetch(`${url}/orders`, {
-            method: 'GET',
-            credentials: "include"
-        });
-
-        response = await response.json();
-        return response;
-    },
-
-    getOrderDetails: async (orderId) => {
-        let response = await fetch(`${url}/orders/${orderId}`, {
-            method: 'GET',
-            credentials: "include"
-        });
-
-        response = await response.json();
-        return response;
-    }
+    response = await response.json();
+    return response;
 }
+
+export const getOrder = async () => {
+    const cookieStore = await cookies()
+    let response = await fetch(`${url}/orders`, {
+        method: 'GET',
+        credentials: "include",
+        headers: {
+            Cookie: cookieStore.toString()
+        }
+    });
+
+    response = await response.json();
+    return response;
+}
+
+export const getOrderDetails = async (orderId) => {
+    const cookieStore = await cookies()
+    let response = await fetch(`${url}/orders/${orderId}`, {
+        method: 'GET',
+        credentials: "include",
+        headers: {
+            Cookie: cookieStore.toString()
+        }
+    });
+
+    response = await response.json();
+    return response;
+}
+
+

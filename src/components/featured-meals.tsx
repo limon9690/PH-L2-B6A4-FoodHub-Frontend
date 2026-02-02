@@ -7,13 +7,13 @@ import {
     CarouselNext,
     CarouselPrevious,
 } from "@/components/ui/carousel"
-import { mealService } from "@/service/meal.service"
 import { MealCard } from "./meal-card";
+import { getAllMeals } from "@/service/meal.service";
 
 export async function FeaturedMeals() {
-    const res = await mealService.getAllMeals({});
+    const res = await getAllMeals({});
 
-    const featuredMeals = res.data.slice(0, 5);
+    const featuredMeals = res.data ? res.data.slice(0, 5) : [];
 
     return (
         <section className="border-b">

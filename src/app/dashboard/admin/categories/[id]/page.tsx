@@ -9,8 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Field, FieldError, FieldLabel } from "@/components/ui/field";
 
-import { categoryService } from "@/service/category.service";
-import { useEffect, useState } from "react";
+import { updateCategory } from "@/service/category.service";
 
 const categorySchema = z.object({
   name: z.string().min(4, "At least 4 characters required.").max(15, "Max 15 characters."),
@@ -38,7 +37,7 @@ export default function UpdateCategoryPage({
     onSubmit: async ({ value }) => {
       const payload = { name: value.name.trim() };
 
-      const result = await categoryService.updateCategory(params.id, payload);
+      const result = await updateCategory(params.id, payload);
 
       if (result?.error) {
         toast.error(result.error.message);
@@ -47,6 +46,7 @@ export default function UpdateCategoryPage({
 
       toast.success("Category updated successfully!");
       router.push("/dashboard/admin/categories");
+      router.refresh();
     },
   });
 
@@ -56,9 +56,9 @@ export default function UpdateCategoryPage({
 
   return (
     <form
-      onSubmit={(e) => {
+      onSubmit={async (e) => {
         e.preventDefault();
-        form.handleSubmit();
+        await form.handleSubmit();
       }}
       className="space-y-4"
     >

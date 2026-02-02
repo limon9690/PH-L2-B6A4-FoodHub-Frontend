@@ -1,38 +1,48 @@
+"use server"
+
+import { cookies } from "next/headers";
+
 const url = `${process.env.NEXT_PUBLIC_API_URL ?? process.env.API_URL}/providers`;
 
-export const providerService = {
-    getAllProviders: async () => {
+export const getAllProviders = async () => {
         const res = await fetch(url);
+        const data = await res.json();
+        return data;
+    }
 
-        return res.json();
-    },
-
-    getSingleProvider : async(providerId : string) => {
+export const getSingleProvider = async(providerId : string) => {
         const res = await fetch(`${url}/${providerId}`);
 
-        return res.json();
-    },
+        const data = await res.json();
+        return data;
+    }
 
-    getSingleProviderByUserId : async () => {
-        const res = await fetch(`${url}/me`, {
+export const getSingleProviderByUserId = async () => {
+     const cookieStore = await cookies();    
+    const res = await fetch(`${url}/me`, {
             method: 'GET',
-            credentials: "include"
+            credentials: "include",
+            headers: {
+                Cookie: cookieStore.toString()
+            }
         })
 
-        return res.json();
-    },
+        const data = await res.json();
+        return data;
+    }
 
-    createProvider : async(data) => {
-        let response = await fetch(url, {
+export const createProvider = async(data) => {
+    const cookieStore = await cookies(); 
+        const response = await fetch(url, {
             method: 'POST',
             credentials: "include",
             body: JSON.stringify(data),
             headers: {
-                'Content-type' : 'application/json'
+                'Content-type' : 'application/json',
+                Cookie: cookieStore.toString()
             }
         });
 
-        response = await response.json();
-        return response;
+        const json = await response.json();
+        return json;
     }
-}

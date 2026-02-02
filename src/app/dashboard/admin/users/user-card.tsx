@@ -13,8 +13,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { ChangeStatusDialog } from "./status-change-dialogue";
-import { adminService } from "@/service/admin.service";
-import { router } from "better-auth/api";
+import { adminService, updateUserStatus } from "@/service/admin.service";
 import { useRouter } from "next/navigation";
 
 
@@ -36,7 +35,7 @@ export function UserSummaryCard({ user }) {
     if (!nextStatus) return;
 
     try {
-      const result = await adminService.updateUserStatus(user.id, {status: nextStatus});
+      const result = await updateUserStatus(user.id, {status: nextStatus});
 
       if (result?.error) {
         toast.error(result?.error?.message);

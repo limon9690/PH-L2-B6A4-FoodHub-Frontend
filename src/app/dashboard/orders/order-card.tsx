@@ -3,12 +3,11 @@
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
-import { orderService } from "@/service/order.service";
 import { Badge } from "@/components/ui/badge";
 import Link from "next/link";
 import { authClient } from "@/lib/auth-client";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { cancelOrder, updateOrderStatus } from "./action";
+import { cancelOrder, getOrderDetails, updateOrderStatus } from "./action";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { EditOrderConfirmDialogue } from "./[id]/cancel-order-dialogue";
@@ -52,7 +51,7 @@ export function OrderCard({ order }) {
   useEffect(() => {
     const load = async () => {
       try {
-        const data = await orderService.getOrderDetails(order.id);
+        const data = await getOrderDetails(order.id);
         setOrderDetails(data);
       } catch (e) {
         console.error(e);

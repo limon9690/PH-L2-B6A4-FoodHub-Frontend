@@ -1,11 +1,11 @@
+import { userService } from "@/service/user.service";
 import { NextRequest, NextResponse } from "next/server";
-import { userService } from "./service/user.service";
 
-export async function proxy(request: NextRequest) {
+export default async function proxy(request: NextRequest) {
   let isAuthenticated = false;
 
   const { data } = await userService.getSession();
-
+  
   if (data) {
     isAuthenticated = true;
   }
@@ -25,7 +25,7 @@ export async function proxy(request: NextRequest) {
     return NextResponse.redirect(new URL("/dashboard", request.url));
   }
 
-  if ((path.startsWith("/cart") || path.startsWith("/checkout")) && role !== "USER") {
+  if ((path.startsWith("/cart") || path.startsWith("/checkout") || path.startsWith("/become-a-provider")) && role !== "USER") {
     return NextResponse.redirect(new URL("/dashboard", request.url));
   }
 
@@ -33,5 +33,5 @@ export async function proxy(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/dashboard/:path*", "/cart", "/checkout"],
+  matcher: ["/dashboard/:path*", "/cart", "/checkout", "/become-a-provider"],
 };

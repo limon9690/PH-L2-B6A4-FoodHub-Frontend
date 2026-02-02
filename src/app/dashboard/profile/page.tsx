@@ -13,11 +13,11 @@ import {
 } from "@/components/ui/field";
 import z from "zod";
 import { useForm } from "@tanstack/react-form";
-import { addressService } from "@/service/address.service";
+import { createAddress, getUserAddress } from "@/service/address.service";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { authClient } from "@/lib/auth-client";
-import { providerService } from "@/service/providers.service";
+import { getSingleProviderByUserId } from "@/service/providers.service";
 
 const addressSchema = z.object({
     address: z.string().min(1, "Address is required."),
@@ -49,7 +49,7 @@ export default function ProfilePage() {
 
     React.useEffect(() => {
         const load = async () => {
-            const getAddress = await addressService.getUserAddress();
+            const getAddress = await getUserAddress();
             setData({
                 address: getAddress?.address ?? "",
                 phone: getAddress?.phone ?? "",
@@ -57,11 +57,10 @@ export default function ProfilePage() {
 
 
             if (user?.role === "PROVIDER") {
-                const getProviderData = await providerService.getSingleProviderByUserId();
+                const getProviderData = await getSingleProviderByUserId();
                 setProviderData({
                     shopName: getProviderData?.shopName ?? ""
                 });
-                // console.log(getProviderData)
             }
         };
         load();
@@ -77,17 +76,23 @@ export default function ProfilePage() {
             onSubmit: addressSchema,
         },
         onSubmit: async ({ value }) => {
-            const result = await addressService.createAddress(value);
+            const result = await createAddress(value);
 
-            if (result.error) {
+            if (result?.error) {
                 toast.error(result?.error?.message);
                 return;
             }
-            toast.success("Address updated. Refresh to see the changes!");
-            router.refresh();
 
+            const fresh = await getUserAddress();
+            setData({
+                address: fresh?.address ?? "",
+                phone: fresh?.phone ?? "",
+            });
 
+            toast.success("Address updated!");
             setEditing(false);
+            router.push('/dashboard/profile')
+            router.refresh();
         },
     });
 
@@ -222,9 +227,9 @@ export default function ProfilePage() {
                         ) : (
                             <form
                                 id="address-form"
-                                onSubmit={(e) => {
+                                onSubmit={async (e) => {
                                     e.preventDefault();
-                                    form.handleSubmit();
+                                    await form.handleSubmit();
                                 }}
                             >
                                 <FieldGroup>

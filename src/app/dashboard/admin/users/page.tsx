@@ -3,7 +3,10 @@ import React from 'react'
 import { UserSummaryCard } from './user-card';
 
 export default async function page() {
-  const users = await userService.getAllUsers();
+  const users = await userService.getAllUsers() ?? [];
+
+  const session = await userService.getSession();
+  console.log(session);
   return (
         <div className="space-y-6">
       {/* Header */}
@@ -16,7 +19,7 @@ export default async function page() {
         </div>
       </div>
 
-      {/* Cards */}
+      Cards
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {users.map((u) => (
           <UserSummaryCard key={u.id} user={u} />

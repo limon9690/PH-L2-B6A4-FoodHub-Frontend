@@ -1,45 +1,72 @@
-const url = `${  process.env.NEXT_PUBLIC_API_URL ??
-  process.env.API_URL}/categories`;
+"use server"
 
-export const categoryService = {
-    getAllCategories: async () => {
-        const res = await fetch(url);
+import { cookies } from "next/headers";
 
-        return res.json();
-    },
-    createCategory: async (data) => {
-        let response = await fetch(url, {
-            method: 'POST',
-            credentials: "include",
-            body: JSON.stringify(data),
-            headers: {
-                'Content-type': 'application/json'
-            }
-        });
+const url = `${process.env.NEXT_PUBLIC_API_URL ??
+    process.env.API_URL}/categories`;
 
-        response = await response.json();
-        return response;
-    },
-    updateCategory: async (categoryId, data) => {
-        let response = await fetch(`${url}/${categoryId}`, {
-            method: 'PUT',
-            credentials: "include",
-            body: JSON.stringify(data),
-            headers: {
-                'Content-type': 'application/json'
-            }
-        });
+export const getAllCategories = async () => {
+    const res = await fetch(url, { cache: "no-store" });
+    const data = await res.json();
+    return data;
+}
 
-        response = await response.json();
-        return response;
-    },
-    deleteCategory: async (categoryId) => {
-        let response = await fetch(`${url}/${categoryId}`, {
-            method: 'DELETE',
-            credentials: 'include',
-        })
+// export const createCategory = async (data) => {
+//         let response = await fetch(url, {
+//             method: 'POST',
+//             credentials: "include",
+//             body: JSON.stringify(data),
+//             headers: {
+//                 'Content-type': 'application/json'
+//             }
+//         });
 
-        response = await response.json();
-        return response;
-    }
+//         const res = await response.json();
+//         return res;
+//     }
+
+export const createCategory = async (data) => {
+    const cookieStore = await cookies();
+    let response = await fetch(url, {
+        method: 'POST',
+        credentials: "include",
+        body: JSON.stringify(data),
+        headers: {
+            'Content-type': 'application/json',
+            Cookie: cookieStore.toString()
+        }
+    });
+
+    const res = await response.json();
+    return res;
+}
+
+export const updateCategory = async (categoryId, data) => {
+    const cookieStore = await cookies();
+    let response = await fetch(`${url}/${categoryId}`, {
+        method: 'PUT',
+        credentials: "include",
+        body: JSON.stringify(data),
+        headers: {
+            'Content-type': 'application/json',
+            Cookie: cookieStore.toString()
+        }
+    });
+
+    response = await response.json();
+    return response;
+}
+
+export const deleteCategory = async (categoryId) => {
+    const cookieStore = await cookies();
+    let response = await fetch(`${url}/${categoryId}`, {
+        method: 'DELETE',
+        credentials: 'include',
+        headers: {
+            Cookie: cookieStore.toString()
+        }
+    })
+
+    response = await response.json();
+    return response;
 }

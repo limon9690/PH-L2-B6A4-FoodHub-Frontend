@@ -6,7 +6,6 @@ import * as z from "zod"
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
 import { Card } from "@/components/ui/card";
@@ -26,10 +25,10 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select";
-import { categoryService } from "@/service/category.service";
-import { mealService } from "@/service/meal.service";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import { createMeal } from "@/service/meal.service";
+import { getAllCategories } from "@/service/category.service";
 
 
 const mealSchema = z.object({
@@ -65,15 +64,18 @@ export function CreateMealForm({
             onSubmit: mealSchema,
         },
         onSubmit: async ({ value }) => {
-            const result = await mealService.createMeal(value);
+            const result = await createMeal(value);
 
             if (result?.error) {
               toast.error(result?.error?.message);
               return;
             }
 
+            console.log(result);
+
             toast.success("Meal created successfully!");
             router.push('/dashboard/provider/menu');
+            // router.refresh();
         },
     });
 
@@ -85,7 +87,7 @@ export function CreateMealForm({
 
     React.useEffect(() => {
         const load = async () => {
-            const data = await categoryService.getAllCategories();
+            const data = await getAllCategories();
             setCategory(data);
         }
         load();
@@ -93,9 +95,9 @@ export function CreateMealForm({
 
     return (
         <form
-            onSubmit={(e) => {
+            onSubmit={async (e) => {
                 e.preventDefault();
-                form.handleSubmit();
+                await form.handleSubmit();
             }}
             className="space-y-4"
         >

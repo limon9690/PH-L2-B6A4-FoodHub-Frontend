@@ -1,6 +1,6 @@
 import { cookies } from "next/headers";
 const url =   process.env.NEXT_PUBLIC_API_URL ??
-  process.env.API_URL;;
+  process.env.API_URL;
 
 export const orderServiceServer = {
     getOrderDetails: async (orderId: string) => {
@@ -17,7 +17,8 @@ export const orderServiceServer = {
             }
         );
 
-        return res.json();
+        const data = await res.json();
+        return data;
     },
     getProviderAddress: async (userId: string) => {
         const cookieStore = await cookies();
@@ -33,6 +34,7 @@ export const orderServiceServer = {
             }
         );
 
-        return res.json();
+        const data = await res.json();
+        return data;
     },
 };
