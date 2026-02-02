@@ -46,7 +46,6 @@ export default function UpdateCategoryPage({
 
       toast.success("Category updated successfully!");
       router.push("/dashboard/admin/categories");
-      router.refresh();
     },
   });
 
