@@ -5,7 +5,7 @@ import { cookies } from "next/headers";
 const url = `${process.env.NEXT_PUBLIC_API_URL ?? process.env.API_URL}/providers`;
 
 export const getAllProviders = async () => {
-        const res = await fetch(url);
+        const res = await fetch(url, { cache: "no-store" });
         const data = await res.json();
         return data;
     }
